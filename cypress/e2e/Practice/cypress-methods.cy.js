@@ -4,6 +4,8 @@ describe("Important Cypress Methods", () => {
     // Then use cy.invoke() to 'slice' the response body by 1.
     // Hint: you will need to use cy.wrap() around the response.body before calling .invoke()
     // https://docs.cypress.io/api/commands/wrap
+    cy.request("GET", "http://localhost:3000/api/posts").as("posts");
+    cy.wrap("@posts").invoke("slice", 0, 1).should("have.length", 1);
   });
 
   it("uses cy.request() and cy.its() to get the first posts ID", () => {
@@ -13,6 +15,9 @@ describe("Important Cypress Methods", () => {
     // Hint: you will need to use cy.wrap() around the response.body before calling .invoke()
     // You will also need to use .its() twice.
     // https://docs.cypress.io/api/commands/wrap
+    cy.request("GET", "http://localhost:3000/api/posts").then((response) => {
+      cy.wrap(response.body).its(0).its("id").should("eq", "pre-rendering");
+    });
   });
 
   it("uses cy.within() to get the <h1> inside of the <header>", () => {
